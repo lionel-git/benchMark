@@ -34,7 +34,11 @@ long benchMandel(double dx, double dy)
 }
 
 // Avoid optimiser to call start/end before benchMark runs ...
+#ifdef __linux__
+std::chrono::time_point<std::chrono::_V2::system_clock> get_time(long b)
+#else
 std::chrono::time_point<std::chrono::steady_clock> get_time(long b)
+#endif
 {
 	if (b == 1)
 		return std::chrono::high_resolution_clock::now();
@@ -43,7 +47,7 @@ std::chrono::time_point<std::chrono::steady_clock> get_time(long b)
 }
 
 int main(int argc, char** argv)
-{
+{  
 	auto start = get_time(0);
 	long total = benchMandel(0.0005, 0.0005);
 	auto end = get_time(total);
