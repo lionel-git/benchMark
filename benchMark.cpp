@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <chrono>
 
 long iterate(double cx, double cy, int max)
 {
@@ -37,8 +38,10 @@ long benchMandel(double dx, double dy)
 
 int main(int argc, char **argv)
 {
-  std::cout << "Hello world" << std::endl;
-
+  auto start = std::chrono::high_resolution_clock::now();
   long total = benchMandel(0.001,0.001);
-  std::cout << total << std::endl;
+  auto end = std::chrono::high_resolution_clock::now();  
+  std::cout << "res=" << total << std::endl;
+  std::chrono::duration<double> diff = end-start;
+  std::cout << diff.count() << " s" << std::endl;
 }
