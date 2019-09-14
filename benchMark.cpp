@@ -39,7 +39,7 @@ long benchMandel(double dx, double dy)
 int main(int argc, char **argv)
 {
   auto start = std::chrono::high_resolution_clock::now();
-  long total = benchMandel(0.001,0.001);
+  long total = benchMandel(0.0005,0.0005);
   auto end = std::chrono::high_resolution_clock::now();  
   std::cout << "res=" << total << std::endl;
   std::chrono::duration<double> diff = end-start;
