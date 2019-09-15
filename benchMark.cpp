@@ -1,5 +1,7 @@
 #include <iostream>
 #include <chrono>
+#include <cstring>
+#include <math.h>
 
 long iterate(double cx, double cy, int max)
 {
