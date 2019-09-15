@@ -46,12 +46,75 @@ std::chrono::time_point<std::chrono::steady_clock> get_time(long b)
 		return std::chrono::high_resolution_clock::now();
 }
 
-int main(int argc, char** argv)
-{  
+long benchHeat(double dx, double dy)
+{
+	int nx = (int)10.0 / dx;
+	int ny = (int)10.0 / dx;
+	int L = nx * ny;
+	if (L == 0)
+		throw new std::runtime_error("L=0");
+	std::cout << "Mem used: " << 2.0 * L * sizeof(double)/(1024.0*1024.0) << " Mo" << std::endl;
+	double* values = new double[L];
+	double* values2 = new double[L];
+
+	for (int i = 0; i < nx; i++)
+		for (int j = 0; j < ny; j++)
+			values[i * ny + j] = 0.0;
+
+	for (int j = 0; j < ny; j++)	
+	{
+		values[0 * ny + j] = j * 45.0;
+		values[(nx-1) * ny + j] = - j * 4.0;
+	}
+
+	for (int i = 0; i < nx; i++)
+	{
+		values[i * ny + 0] = i * 17.0;
+		values[i * ny + ny - 1] = -i * 5.0;
+	}
+
+	memcpy(values2, values, L*sizeof(double));
+
+	double* values_src = values;
+	double* values_dest = values2;
+
+	double diff = 0.0;
+	long k = 0;
+	do
+	{
+		// Update temp
+		diff = 0.0;
+		for (int i = 1; i < nx - 1; i++)
+			for (int j = 1; j < ny - 1; j++)
+			{
+				values_dest[i * ny + j] = 0.25 *
+					(values_src[i * ny + (j - 1)] + values_src[i * ny + (j + 1)]
+						+ values_src[(i - 1) * ny + j] + values_src[(i + 1) * ny + j]);
+				diff += fabs(values_dest[i * ny + j] - values_src[i * ny + j]);
+			}
+		// switch vectors
+		auto temp = values_dest;
+		values_dest = values_src;
+		values_src = temp;
+		k++;
+	} while (diff > 0.1*L);
+	return k;
+}
+
+void bench(const std::string& func_name, double dx, double dy, long(*bench_func)(double ddx, double ddy))
+{
+	std::cout << "Start " << func_name << std::endl;
 	auto start = get_time(0);
-	long total = benchMandel(0.0005, 0.0005);
+	long total = bench_func(dx, dy);
 	auto end = get_time(total);
 	std::cout << "res=" << total << std::endl;
 	std::chrono::duration<double> diff = end - start;
 	std::cout << diff.count() << " s" << std::endl;
+	std::cout << "==============" << std::endl;
 }
+
+int main(int argc, char** argv)
+{  
+//	bench("benchMandel", 0.0005, 0.0005, benchMandel);
+	bench("benchHeat", 0.01, 0.01, benchHeat);
+} 
