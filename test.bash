@@ -6,7 +6,7 @@ CMD=/opt/vc/bin/vcgencmd
 
 i="0"
 
-while [ $i -lt 40 ]
+while [ $i -lt 2000 ]
 do
     $CMD measure_temp
     $CMD measure_clock arm
