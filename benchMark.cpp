@@ -55,7 +55,7 @@ long benchHeat(double dx, double dy)
 	int L = nx * ny;
 	if (L == 0)
 		throw new std::runtime_error("L=0");
-	std::cout << "Mem used: " << 2.0 * L * sizeof(double)/(1024.0*1024.0) << " Mo" << std::endl;
+	std::cout << "Mem used: " << 2.0 * L * sizeof(double) / (1024.0 * 1024.0) << " Mo" << std::endl;
 	double* values = new double[L];
 	double* values2 = new double[L];
 
@@ -63,10 +63,10 @@ long benchHeat(double dx, double dy)
 		for (int j = 0; j < ny; j++)
 			values[i * ny + j] = 0.0;
 
-	for (int j = 0; j < ny; j++)	
+	for (int j = 0; j < ny; j++)
 	{
 		values[0 * ny + j] = j * 45.0;
-		values[(nx-1) * ny + j] = - j * 4.0;
+		values[(nx - 1) * ny + j] = -j * 4.0;
 	}
 
 	for (int i = 0; i < nx; i++)
@@ -75,7 +75,7 @@ long benchHeat(double dx, double dy)
 		values[i * ny + ny - 1] = -i * 5.0;
 	}
 
-	memcpy(values2, values, L*sizeof(double));
+	memcpy(values2, values, L * sizeof(double));
 
 	double* values_src = values;
 	double* values_dest = values2;
@@ -99,7 +99,7 @@ long benchHeat(double dx, double dy)
 		values_dest = values_src;
 		values_src = temp;
 		k++;
-	} while (diff > 0.1*L);
+	} while (diff > 0.1 * L);
 	return k;
 }
 
@@ -116,7 +116,19 @@ void bench(const std::string& func_name, double dx, double dy, long(*bench_func)
 }
 
 int main(int argc, char** argv)
-{  
-//	bench("benchMandel", 0.0005, 0.0005, benchMandel);
-	bench("benchHeat", 0.01, 0.01, benchHeat);
-} 
+{
+	if (argc == 1)
+	{
+		std::cout << "Syntax: " << argv[0] << " (Mandel, Heat, All)" << std::endl;
+		return 0;
+	}
+
+	bool doAll = (strcmp(argv[1], "All") == 0);
+	for (int i = 1; i < argc; i++)
+	{
+		if (argv[i] == "Mandel" || doAll)
+			bench("benchMandel", 0.0005, 0.0005, benchMandel);
+		if (argv[i] == "Heat" || doAll)
+			bench("benchHeat", 0.01, 0.01, benchHeat);
+	}
+}
