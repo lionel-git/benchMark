@@ -120,7 +120,7 @@ void bench(int threads, const std::string& func_name, double dx, double dy, void
 	auto end = get_time(total);
 	std::cout << "res=" << total << " " << total/threads << " " << total % threads << std::endl;
 	std::chrono::duration<double> diff = end - start;
-	std::cout << diff.count() << " s" << std::endl;
+	std::cout << diff.count() << " s" << " " << diff.count()/threads << " s/thread" << std::endl;
 	std::cout << "==============" << std::endl;
 
 	delete[] tab_threads;
@@ -129,9 +129,8 @@ void bench(int threads, const std::string& func_name, double dx, double dy, void
 
 void bench_threads(const std::string& func_name, double dx, double dy, void (*bench_func)(double ddx, double ddy, long long& ret))
 {
-	int nb_threads = std::thread::hardware_concurrency();
-	bench(1, func_name, dx, dy, bench_func);
-	bench(nb_threads, func_name, dx, dy, bench_func);
+	for (int threads = 1; threads <= std::thread::hardware_concurrency(); threads++)
+		bench(threads, func_name, dx, dy, bench_func);
 }
 
 
