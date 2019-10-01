@@ -2,6 +2,7 @@
 #include <chrono>
 #include <cstring>
 #include <math.h>
+#include <thread>
 
 long iterate(double cx, double cy, int max)
 {
@@ -23,16 +24,15 @@ long iterate(double cx, double cy, int max)
 }
 
 
-long benchMandel(double dx, double dy)
+void benchMandel(double dx, double dy, long long &total)
 {
-	long total = 0;
+	total = 0;
 	int max = 200;
 	for (double x = -2.0; x < 2.0; x += dx)
 		for (double y = -2.0; y < 2.0; y += dy)
 		{
 			total += iterate(x, y, max);
 		}
-	return total;
 }
 
 // Avoid optimiser to call start/end before benchMark runs ...
@@ -48,7 +48,7 @@ std::chrono::time_point<std::chrono::steady_clock> get_time(long b)
 		return std::chrono::high_resolution_clock::now();
 }
 
-long benchHeat(double dx, double dy)
+void benchHeat(double dx, double dy, long long& ret)
 {
 	int nx = (int)10.0 / dx;
 	int ny = (int)10.0 / dx;
@@ -100,20 +100,40 @@ long benchHeat(double dx, double dy)
 		values_src = temp;
 		k++;
 	} while (diff > 0.1 * L);
-	return k;
+	ret = k;
 }
 
-void bench(const std::string& func_name, double dx, double dy, long(*bench_func)(double ddx, double ddy))
+void bench(int threads, const std::string& func_name, double dx, double dy, void (*bench_func)(double ddx, double ddy, long long& ret))
 {
-	std::cout << "Start " << func_name << std::endl;
+	std::cout << "Start " << func_name << " " << threads << std::endl;
 	auto start = get_time(0);
-	long total = bench_func(dx, dy);
+
+	std::thread* tab_threads = new std::thread[threads];
+	long long *tot = new long long[threads];
+	for (int i = 0; i < threads;i++)
+		tab_threads[i] = std::thread(bench_func, dx, dy, std::ref(tot[i]));
+	for (int i = 0; i < threads; i++)
+		tab_threads[i].join();
+	long long total = 0;
+	for (int i = 0; i < threads; i++)
+		total += tot[i];
 	auto end = get_time(total);
-	std::cout << "res=" << total << std::endl;
+	std::cout << "res=" << total << " " << total/threads << " " << total % threads << std::endl;
 	std::chrono::duration<double> diff = end - start;
 	std::cout << diff.count() << " s" << std::endl;
 	std::cout << "==============" << std::endl;
+
+	delete[] tab_threads;
+	delete[] tot;
 }
+
+void bench_threads(const std::string& func_name, double dx, double dy, void (*bench_func)(double ddx, double ddy, long long& ret))
+{
+	int nb_threads = std::thread::hardware_concurrency();
+	bench(1, func_name, dx, dy, bench_func);
+	bench(nb_threads, func_name, dx, dy, bench_func);
+}
+
 
 int main(int argc, char** argv)
 {
@@ -127,8 +147,8 @@ int main(int argc, char** argv)
 	for (int i = 1; i < argc; i++)
 	{
 		if (argv[i] == "Mandel" || doAll)
-			bench("benchMandel", 0.0005, 0.0005, benchMandel);
+			bench_threads("benchMandel", 0.0005, 0.0005, benchMandel);
 		if (argv[i] == "Heat" || doAll)
-			bench("benchHeat", 0.01, 0.01, benchHeat);
+			bench_threads("benchHeat", 0.01, 0.01, benchHeat);
 	}
 }
