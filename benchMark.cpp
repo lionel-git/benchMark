@@ -17,6 +17,7 @@ long iterate(double cx, double cy, int max)
 		// z = z^2 + c
 		y = 2 * x * y + cy;
 		x = x2 - y2 + cx;
+
 		x2 = x * x;
 		y2 = y * y;
 		k++;
@@ -40,13 +41,20 @@ long iterate2(double cx, double cy, int max)
 	double y2 = y * y;
 	while (k < max && (x2 + y2 < 4.0))
 	{
-		// Z=z^2
+		// Z2=z^2
 		double Z2x = x2 - y2;
 		double Z2y = 2 * x * y;
 
-		// z = z^4 + B.z^2 + C
-		x = (Z2x * Z2x - Z2y * Z2y) + (Bx * Z2x - By * Z2y) + Cx;
-		y = (2 * Z2x * Z2y) + Bx * Z2y + By * Z2x + Cy;
+		// z = z^4 + B.z^2 + C = Z2.(Z2 + B) + C
+//		x = (Z2x * Z2x - Z2y * Z2y) + (Bx * Z2x - By * Z2y) + Cx;
+//		y = (2 * Z2x * Z2y) + Bx * Z2y + By * Z2x + Cy;
+
+		// z= Z2 . K + C avec K=Z2 + B
+		double Kx = Z2x + Bx;
+		double Ky = Z2y + By;
+
+		x = Z2x * Kx - Z2y * Ky + Cx;
+		y = Z2x * Ky + Z2y * Kx + Cy;
 
 		x2 = x * x;
 		y2 = y * y;
