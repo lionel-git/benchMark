@@ -12,7 +12,7 @@ long iterate(double cx, double cy, int max)
 	double y = 0.0;
 	double x2 = x * x;
 	double y2 = y * y;
-	while (k < max && (x2 + y2 < 4.0))
+	while ((k&1)==1 || (k < max && (x2 + y2 < 4.0)))
 	{
 		// z = z^2 + c
 		y = 2 * x * y + cy;
@@ -24,6 +24,36 @@ long iterate(double cx, double cy, int max)
 	return k;
 }
 
+// unroll 2 iterations
+// z = (z^2 + c)^2 + c = z^4 + 2.c.z^2 + c^2 + c
+// z = z^4 + B.z^2 + C avec B=2c C=c^2+c
+long iterate2(double cx, double cy, int max)
+{
+	int k = 0;
+	double Cx = cx * cx - cy * cy + cx;
+	double Cy = 2 * cx * cy + cy;
+	double Bx = 2 * cx;
+	double By = 2 * cy;
+	double x = 0.0;
+	double y = 0.0;
+	double x2 = x * x;
+	double y2 = y * y;
+	while (k < max && (x2 + y2 < 4.0))
+	{
+		// Z=z^2
+		double Z2x = x2 - y2;
+		double Z2y = 2 * x * y;
+
+		// z = z^4 + B.z^2 + C
+		x = (Z2x * Z2x - Z2y * Z2y) + (Bx * Z2x - By * Z2y) + Cx;
+		y = (2 * Z2x * Z2y) + Bx * Z2y + By * Z2x + Cy;
+
+		x2 = x * x;
+		y2 = y * y;
+		k+=2;
+	}
+	return k;
+}
 
 void benchMandel(double dx, double dy, long long &total)
 {
@@ -35,6 +65,18 @@ void benchMandel(double dx, double dy, long long &total)
 			total += iterate(x, y, max);
 		}
 }
+
+void benchMandel2(double dx, double dy, long long& total)
+{
+	total = 0;
+	int max = 200;
+	for (double x = -2.0; x < 2.0; x += dx)
+		for (double y = -2.0; y < 2.0; y += dy)
+		{
+			total += iterate2(x, y, max);
+		}
+}
+
 
 // Avoid optimiser to call start/end before benchMark runs ...
 #ifdef __linux__
@@ -138,16 +180,18 @@ int main(int argc, char** argv)
 {
 	if (argc == 1)
 	{
-		std::cout << "Syntax: " << argv[0] << " (Mandel, Heat, All)" << std::endl;
+		std::cout << "Syntax: " << argv[0] << " (Mandel, Mandel2, Heat, All)" << std::endl;
 		return 0;
 	}
 
 	bool doAll = (strcmp(argv[1], "All") == 0);
 	for (int i = 1; i < argc; i++)
 	{
-		if (argv[i] == "Mandel" || doAll)
+		if ((strcmp(argv[i], "Mandel") == 0) || doAll)
 			bench_threads("benchMandel", 0.0005, 0.0005, benchMandel);
-		if (argv[i] == "Heat" || doAll)
+		if ((strcmp(argv[i], "Mandel2") == 0) || doAll)
+			bench_threads("benchMandel2", 0.0005, 0.0005, benchMandel2);
+		if ((strcmp(argv[i], "Heat") == 0) || doAll)
 			bench_threads("benchHeat", 0.01, 0.01, benchHeat);
 	}
 }
