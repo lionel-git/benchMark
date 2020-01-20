@@ -4,6 +4,7 @@
 #include <math.h>
 #include <thread>
 #include <vector>
+#include <string>
 
 long iterate(double cx, double cy, int max)
 {
