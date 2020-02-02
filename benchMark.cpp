@@ -187,6 +187,18 @@ void bench_threads(const std::string& func_name, double dx, double dy, void (*be
 
 int main(int argc, char** argv)
 {
+#if defined(_MSC_FULL_VER)
+	std::cout << "MSC_FULL_VER: " << _MSC_FULL_VER << std::endl;
+#endif
+
+#if defined(__GNUC__) 
+	std::cout << "g++ compiler: " << __GNUC__ << "." << __GNUC_MINOR__ << std::endl;
+#endif
+
+#if defined (__clang_major__)
+	std::cout << "Clang compiler: " << __clang_major__ << "."<< __clang_minor__ << "." <<__clang_patchlevel__ << std::endl;
+#endif 
+
 	if (argc == 1)
 	{
 		std::cout << "Syntax: " << argv[0] << " (Mandel, Mandel2, Heat, All)" << std::endl;
