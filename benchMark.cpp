@@ -88,11 +88,7 @@ void benchMandel2(double dx, double dy, long long& total)
 
 
 // Avoid optimiser to call start/end before benchMark runs ...
-#if defined(__linux__) || defined(__MINGW32__)
-std::chrono::time_point<std::chrono::_V2::system_clock> get_time(long b)
-#else
-std::chrono::time_point<std::chrono::steady_clock> get_time(long long b)
-#endif
+auto get_time(long long b)
 {
 	if (b == 1)
 		return std::chrono::high_resolution_clock::now();
