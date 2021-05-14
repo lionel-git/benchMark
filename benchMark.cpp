@@ -87,15 +87,6 @@ void benchMandel2(double dx, double dy, long long& total)
 }
 
 
-// Avoid optimiser to call start/end before benchMark runs ...
-auto get_time(long long b)
-{
-	if (b == 1)
-		return std::chrono::high_resolution_clock::now();
-	else
-		return std::chrono::high_resolution_clock::now();
-}
-
 void benchHeat(double dx, double dy, long long& ret)
 {
 	int nx = (int)(10.0 / dx);
@@ -153,6 +144,25 @@ void benchHeat(double dx, double dy, long long& ret)
 	delete[] values2;
 }
 
+void benchPi(double dx, double dy, long long& ret)
+{
+	double sum = 0.0;
+	for (double x = 0.0; x < 1.0; x += dx)
+		sum += sqrt(1.0 - x * x);
+	ret = (long long)(dx * sum * 40000000000.0);
+}
+
+// == Utils for bench ================================================
+
+// Avoid optimiser to call start/end before benchMark runs ...
+auto get_time(long long b)
+{
+	if (b == 1)
+		return std::chrono::high_resolution_clock::now();
+	else
+		return std::chrono::high_resolution_clock::now();
+}
+
 void bench(unsigned int threads, const std::string& func_name, double dx, double dy, void (*bench_func)(double ddx, double ddy, long long& ret))
 {
 	std::cout << "Start " << func_name << " " << threads << std::endl;
@@ -197,7 +207,7 @@ int main(int argc, char** argv)
 
 	if (argc == 1)
 	{
-		std::cout << "Syntax: " << argv[0] << " (Mandel, Mandel2, Heat, All)" << std::endl;
+		std::cout << "Syntax: " << argv[0] << " (Mandel, Mandel2, Heat, Pi, All)" << std::endl;
 		return 0;
 	}
 
@@ -210,5 +220,7 @@ int main(int argc, char** argv)
 			bench_threads("benchMandel2", 0.0005, 0.0005, benchMandel2);
 		if ((strcmp(argv[i], "Heat") == 0) || doAll)
 			bench_threads("benchHeat", 0.01, 0.01, benchHeat);
+		if ((strcmp(argv[i], "Pi") == 0) || doAll)
+			bench_threads("benchPi", 1e-9, 0.0, benchPi);
 	}
 }
