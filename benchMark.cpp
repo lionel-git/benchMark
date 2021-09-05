@@ -195,6 +195,21 @@ int main(int argc, char** argv)
 {
 #if defined(_MSC_FULL_VER)
 	std::cout << "MSC_FULL_VER: " << _MSC_FULL_VER << std::endl;
+
+
+// Cf https://docs.microsoft.com/fr-fr/cpp/preprocessor/predefined-macros?view=msvc-160
+#if defined(__AVX__)
+	std::cout << "__AVX__: " << __AVX__ << std::endl;
+#endif
+
+#if defined(__AVX2__)
+	std::cout << "__AVX2__: " << __AVX2__ << std::endl;
+#endif
+
+#if defined(__AVX512BW__)
+	std::cout << "__AVX512BW__: " << __AVX512BW__ << std::endl;
+#endif
+
 #endif
 
 #if defined(__GNUC__) 
