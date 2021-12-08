@@ -1,11 +1,12 @@
+SOURCEFILES = benchMark.cpp fft_example.cpp
 
 all : benchMark benchMark_clang
 
-benchMark: benchMark.cpp
-	g++ -O3 -march=native benchMark.cpp -lpthread -o benchMark
+benchMark: $(SOURCEFILES)
+	g++ -O3 -march=native $(SOURCEFILES) -lpthread -o benchMark
 
-benchMark_clang: benchMark.cpp
-	clang++ -O3 benchMark.cpp -lpthread -o benchMark_clang
+benchMark_clang: $(SOURCEFILES)
+	clang++ -O3 $(SOURCEFILES) -lpthread -o benchMark_clang
 
 clean:
 	rm -f benchMark benchMark_clang
