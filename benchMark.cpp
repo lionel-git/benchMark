@@ -156,12 +156,12 @@ void benchPi(double dx, double dy, long long& ret)
 	ret = (long long)(dx * sum * 40000000000.0);
 }
 
-void benchFft(double dx, double dy, long long& total)
+void benchFft(double m0, double c, long long& total)
 {
-	long m = (long)(1.0 / dx + 0.5);
-	if (m >= 32)
+	long m = (long)(m0 + 0.5);
+	if (m <= 1 && m >= 32)
 	{
-		std::cerr << "m is too big: " << m << std::endl;
+		std::cerr << "m is invalid: " << m << std::endl;
 		return;
 	}
 
@@ -175,13 +175,13 @@ void benchFft(double dx, double dy, long long& total)
 		auto v = mt();
 		if (v & 1)
 		{
-			z[i].real(dy);
-			z[i].imag(1.0 - dy);
+			z[i].real(c);
+			z[i].imag(1.0 - c);
 		}
 		else
 		{
-			z[i].real(1.0 - dy);
-			z[i].imag(dy);
+			z[i].real(1.0 - c);
+			z[i].imag(c);
 		}
 	}
 
@@ -280,6 +280,6 @@ int main(int argc, char** argv)
 		if ((strcmp(argv[i], "Pi") == 0) || doAll)
 			bench_threads("benchPi", 1e-9, 0.0, benchPi);
 		if ((strcmp(argv[i], "Fft") == 0) || doAll)
-			bench_threads("benchFft", 1.0/24.0, 0.1234, benchFft);
+			bench_threads("benchFft", 24, 0.1234, benchFft);
 	}
 }
