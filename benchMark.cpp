@@ -264,7 +264,7 @@ int main(int argc, char** argv)
 
 	if (argc == 1)
 	{
-		std::cout << "Syntax: " << argv[0] << " (Mandel, Mandel2, Heat, Pi, All)" << std::endl;
+		std::cout << "Syntax: " << argv[0] << " (Mandel, Mandel2, Heat, Pi, Fft, All)" << std::endl;
 		return 0;
 	}
 
