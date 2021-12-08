@@ -18,6 +18,9 @@
     <ClCompile Include="benchMark.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fft_example.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="makefile">

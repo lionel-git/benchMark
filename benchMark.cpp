@@ -5,6 +5,10 @@
 #include <thread>
 #include <vector>
 #include <string>
+#include <complex>
+#include <random>
+
+extern void FFT(int dir, long m, std::complex<double> x[]);
 
 long iterate(double cx, double cy, int max)
 {
@@ -152,6 +156,38 @@ void benchPi(double dx, double dy, long long& ret)
 	ret = (long long)(dx * sum * 40000000000.0);
 }
 
+void benchFft(double dx, double dy, long long& total)
+{
+	long m = (long)(1.0 / dx + 0.5);
+	long N = 1l << m;
+	std::unique_ptr<std::complex<double>[]> z(new std::complex<double>[N]);
+
+	std::mt19937 mt(1234);
+
+	for (long i = 0; i < N; i++)
+	{
+		auto v = mt();
+		if (v & 1)
+		{
+			z[i].real(dy);
+			z[i].imag(1.0-dy);
+		}
+		else
+		{
+			z[i].real(1.0-dy);
+			z[i].imag(dy);
+		}
+	}
+
+	FFT(+1, m, z.get());
+	FFT(-1, m, z.get());
+
+	double ret = 0.0;
+	for (long i = 0; i < N; i++)
+		ret += z[i].real() + z[i].imag();
+	total = (long)(10.0*ret+0.5);
+}
+
 // == Utils for bench ================================================
 
 // Avoid optimiser to call start/end before benchMark runs ...
@@ -237,5 +273,7 @@ int main(int argc, char** argv)
 			bench_threads("benchHeat", 0.01, 0.01, benchHeat);
 		if ((strcmp(argv[i], "Pi") == 0) || doAll)
 			bench_threads("benchPi", 1e-9, 0.0, benchPi);
+		if ((strcmp(argv[i], "Fft") == 0) || doAll)
+			bench_threads("benchFt", 0.025, 0.0, benchFft);
 	}
 }
