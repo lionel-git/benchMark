@@ -17,7 +17,7 @@ long iterate(double cx, double cy, int max)
 	double y = 0.0;
 	double x2 = x * x;
 	double y2 = y * y;
-	while ((k&1)==1 || (k < max && (x2 + y2 < 4.0)))
+	while ((k & 1) == 1 || (k < max && (x2 + y2 < 4.0)))
 	{
 		// z = z^2 + c
 		y = 2 * x * y + cy;
@@ -63,12 +63,12 @@ long iterate2(double cx, double cy, int max)
 
 		x2 = x * x;
 		y2 = y * y;
-		k+=2;
+		k += 2;
 	}
 	return k;
 }
 
-void benchMandel(double dx, double dy, long long &total)
+void benchMandel(double dx, double dy, long long& total)
 {
 	total = 0;
 	int max = 200;
@@ -159,6 +159,12 @@ void benchPi(double dx, double dy, long long& ret)
 void benchFft(double dx, double dy, long long& total)
 {
 	long m = (long)(1.0 / dx + 0.5);
+	if (m >= 32)
+	{
+		std::cerr << "m is too big: " << m << std::endl;
+		return;
+	}
+
 	long N = 1l << m;
 	std::unique_ptr<std::complex<double>[]> z(new std::complex<double>[N]);
 
@@ -170,11 +176,11 @@ void benchFft(double dx, double dy, long long& total)
 		if (v & 1)
 		{
 			z[i].real(dy);
-			z[i].imag(1.0-dy);
+			z[i].imag(1.0 - dy);
 		}
 		else
 		{
-			z[i].real(1.0-dy);
+			z[i].real(1.0 - dy);
 			z[i].imag(dy);
 		}
 	}
@@ -185,7 +191,7 @@ void benchFft(double dx, double dy, long long& total)
 	double ret = 0.0;
 	for (long i = 0; i < N; i++)
 		ret += z[i].real() + z[i].imag();
-	total = (long)(10.0*ret+0.5);
+	total = (long long)(10.0 * ret + 0.5);
 }
 
 // == Utils for bench ================================================
@@ -205,8 +211,8 @@ void bench(unsigned int threads, const std::string& func_name, double dx, double
 	auto start = get_time(0);
 
 	auto v_threads = std::vector<std::thread>(threads);
-	auto totals  = std::vector<long long>(threads);
-	for (unsigned int i = 0; i < threads;i++)
+	auto totals = std::vector<long long>(threads);
+	for (unsigned int i = 0; i < threads; i++)
 		v_threads[i] = std::thread(bench_func, dx, dy, std::ref(totals[i]));
 	for (unsigned int i = 0; i < threads; i++)
 		v_threads[i].join();
@@ -214,10 +220,10 @@ void bench(unsigned int threads, const std::string& func_name, double dx, double
 	for (unsigned int i = 0; i < threads; i++)
 		total += totals[i];
 	auto end = get_time(total);
-	std::cout << "res=" << total << " " << total/threads << " " << total % threads << std::endl;
+	std::cout << "res=" << total << " " << total / threads << " " << total % threads << std::endl;
 	std::chrono::duration<double> diff = end - start;
-	std::cout << diff.count() << " s" << " " << diff.count()/threads << " s/thread" << std::endl;
-	std::cout << "==============" << std::endl;	
+	std::cout << diff.count() << " s" << " " << diff.count() / threads << " s/thread" << std::endl;
+	std::cout << "==============" << std::endl;
 }
 
 void bench_threads(const std::string& func_name, double dx, double dy, void (*bench_func)(double ddx, double ddy, long long& ret))
@@ -233,7 +239,7 @@ int main(int argc, char** argv)
 	std::cout << "MSC_FULL_VER: " << _MSC_FULL_VER << std::endl;
 
 
-// Cf https://docs.microsoft.com/fr-fr/cpp/preprocessor/predefined-macros?view=msvc-160
+	// Cf https://docs.microsoft.com/fr-fr/cpp/preprocessor/predefined-macros?view=msvc-160
 #if defined(__AVX__)
 	std::cout << "__AVX__: " << __AVX__ << std::endl;
 #endif
@@ -253,7 +259,7 @@ int main(int argc, char** argv)
 #endif
 
 #if defined (__clang_major__)
-	std::cout << "Clang compiler: " << __clang_major__ << "."<< __clang_minor__ << "." <<__clang_patchlevel__ << std::endl;
+	std::cout << "Clang compiler: " << __clang_major__ << "." << __clang_minor__ << "." << __clang_patchlevel__ << std::endl;
 #endif 
 
 	if (argc == 1)
@@ -274,6 +280,6 @@ int main(int argc, char** argv)
 		if ((strcmp(argv[i], "Pi") == 0) || doAll)
 			bench_threads("benchPi", 1e-9, 0.0, benchPi);
 		if ((strcmp(argv[i], "Fft") == 0) || doAll)
-			bench_threads("benchFt", 0.025, 0.0, benchFft);
+			bench_threads("benchFft", 1.0/24.0, 0.1234, benchFft);
 	}
 }
