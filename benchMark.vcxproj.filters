@@ -21,6 +21,9 @@
     <ClCompile Include="fft_example.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="invert_matrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="makefile">

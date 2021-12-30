@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="benchMark.cpp" />
     <ClCompile Include="fft_example.cpp" />
+    <ClCompile Include="invert_matrix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="makefile" />

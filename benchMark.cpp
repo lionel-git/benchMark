@@ -10,6 +10,8 @@
 
 extern void FFT(int dir, long m, std::complex<double> x[]);
 
+extern double invert_matrix(int size);
+
 long iterate(double cx, double cy, int max)
 {
 	int k = 0;
@@ -194,6 +196,12 @@ void benchFft(double m0, double c, long long& total)
 	total = (long long)(10.0 * ret + 0.5);
 }
 
+void benchMatrix(double size, double a, long long& total)
+{
+	auto distance = invert_matrix((int)size);
+	total = (long long)(distance * 1e10);
+}
+
 // == Utils for bench ================================================
 
 // Avoid optimiser to call start/end before benchMark runs ...
@@ -264,7 +272,7 @@ int main(int argc, char** argv)
 
 	if (argc == 1)
 	{
-		std::cout << "Syntax: " << argv[0] << " (Mandel, Mandel2, Heat, Pi, Fft, All)" << std::endl;
+		std::cout << "Syntax: " << argv[0] << " (Mandel, Mandel2, Heat, Pi, Fft, Matrix, All)" << std::endl;
 		return 0;
 	}
 
@@ -281,5 +289,7 @@ int main(int argc, char** argv)
 			bench_threads("benchPi", 1e-9, 0.0, benchPi);
 		if ((strcmp(argv[i], "Fft") == 0) || doAll)
 			bench_threads("benchFft", 24, 0.1234, benchFft);
+		if ((strcmp(argv[i], "Matrix") == 0) || doAll)
+			bench_threads("benchMatrix", 1000, 0.0, benchMatrix);
 	}
 }
