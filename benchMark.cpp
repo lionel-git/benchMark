@@ -161,7 +161,7 @@ void benchPi(double dx, double dy, long long& ret)
 void benchFft(double m0, double c, long long& total)
 {
 	long m = (long)(m0 + 0.5);
-	if (m <= 1 && m >= 32)
+	if (m <= 1 || m >= 32)
 	{
 		std::cerr << "m is invalid: " << m << std::endl;
 		return;
