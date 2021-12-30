@@ -1,4 +1,4 @@
-SOURCEFILES = benchMark.cpp fft_example.cpp
+SOURCEFILES = benchMark.cpp fft_example.cpp invert_matrix.cpp
 
 all : benchMark benchMark_clang
 
