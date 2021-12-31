@@ -72,9 +72,9 @@ double invert_matrix(int size)
 	while (pivot < size)
 	{
 		// Search max abs value on pivot column
-		double max = -1.0;
-		int row_max = -1;
-		for (int i = pivot; i < size; i++)
+		double max = fabs(m[pivot][pivot]);
+		int row_max = pivot;
+		for (int i = pivot + 1; i < size; i++)
 		{
 			if (fabs(m[i][pivot]) > max)
 			{
