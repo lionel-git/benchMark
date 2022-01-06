@@ -8,6 +8,8 @@
 #include <complex>
 #include <random>
 
+#include "features_check.h"
+
 extern void FFT(int dir, long m, std::complex<double> x[]);
 
 extern double invert_matrix(int size);
