@@ -242,26 +242,32 @@ void bench_threads(const std::string& func_name, double dx, double dy, void (*be
 		bench(threads, func_name, dx, dy, bench_func);
 }
 
-
+// Warning: feature check will not run if specific instructions are used for prologue
 int main(int argc, char** argv)
 {
+	std::cout << "Starting..." << std::endl;
+
 #if defined(_MSC_FULL_VER)
 	std::cout << "MSC_FULL_VER: " << _MSC_FULL_VER << std::endl;
-
+#endif
 
 	// Cf https://docs.microsoft.com/fr-fr/cpp/preprocessor/predefined-macros?view=msvc-160
 #if defined(__AVX__)
 	std::cout << "__AVX__: " << __AVX__ << std::endl;
+	if (!check_avx())
+		std::cerr << "Avx seems not supported!" << std::endl;
 #endif
 
 #if defined(__AVX2__)
 	std::cout << "__AVX2__: " << __AVX2__ << std::endl;
+	if (!check_avx2())
+		std::cerr << "Avx2 seems not supported!" << std::endl;
 #endif
 
-#if defined(__AVX512BW__)
-	std::cout << "__AVX512BW__: " << __AVX512BW__ << std::endl;
-#endif
-
+#if defined(__AVX512F__)
+	std::cout << "__AVX512F__: " << __AVX512F__ << std::endl;
+	if (!check_avx512())
+		std::cerr << "Avx512 seems not supported!" << std::endl;
 #endif
 
 #if defined(__GNUC__) 
