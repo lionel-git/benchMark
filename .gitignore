@@ -337,3 +337,4 @@ test_mingw64_static.exe
 analysis.txt
 
 /.vscode
+/Exes
