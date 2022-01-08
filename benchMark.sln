@@ -8,32 +8,22 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Avx|x64 = Avx|x64
-		Avx|x86 = Avx|x86
 		Avx2|x64 = Avx2|x64
-		Avx2|x86 = Avx2|x86
 		avx512|x64 = avx512|x64
-		avx512|x86 = avx512|x86
 		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
 		sse2|x64 = sse2|x64
-		sse2|x86 = sse2|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3B8995FF-8BA1-4003-A665-8598E335587E}.Avx|x64.ActiveCfg = Avx|x64
 		{3B8995FF-8BA1-4003-A665-8598E335587E}.Avx|x64.Build.0 = Avx|x64
-		{3B8995FF-8BA1-4003-A665-8598E335587E}.Avx|x86.ActiveCfg = Avx|x64
 		{3B8995FF-8BA1-4003-A665-8598E335587E}.Avx2|x64.ActiveCfg = Avx2|x64
 		{3B8995FF-8BA1-4003-A665-8598E335587E}.Avx2|x64.Build.0 = Avx2|x64
-		{3B8995FF-8BA1-4003-A665-8598E335587E}.Avx2|x86.ActiveCfg = Avx2|x64
 		{3B8995FF-8BA1-4003-A665-8598E335587E}.avx512|x64.ActiveCfg = avx512|x64
 		{3B8995FF-8BA1-4003-A665-8598E335587E}.avx512|x64.Build.0 = avx512|x64
-		{3B8995FF-8BA1-4003-A665-8598E335587E}.avx512|x86.ActiveCfg = avx512|x64
 		{3B8995FF-8BA1-4003-A665-8598E335587E}.Debug|x64.ActiveCfg = Debug|x64
 		{3B8995FF-8BA1-4003-A665-8598E335587E}.Debug|x64.Build.0 = Debug|x64
-		{3B8995FF-8BA1-4003-A665-8598E335587E}.Debug|x86.ActiveCfg = Debug|x64
 		{3B8995FF-8BA1-4003-A665-8598E335587E}.sse2|x64.ActiveCfg = sse2|x64
 		{3B8995FF-8BA1-4003-A665-8598E335587E}.sse2|x64.Build.0 = sse2|x64
-		{3B8995FF-8BA1-4003-A665-8598E335587E}.sse2|x86.ActiveCfg = sse2|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
