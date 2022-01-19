@@ -20,6 +20,15 @@ bool is_above(complex_t z, double epsilon)
 	return z.real() * z.real() + z.imag() * z.imag() > epsilon;
 }
 
+// Show p(z).(z-c)
+void multiply(const polynom_t& q, int n, complex_t c)
+{
+	std::cout << 0 << ": " << -q[0] * c << std::endl;
+	for (long long i = 1; i < n ; i++)
+		std::cout << i << ": " << q[i - 1] - q[i] * c << std::endl;
+	std::cout << n << ": " << q[n - 1] << std::endl;
+}
+
 double find_roots(int size)
 {
 	std::mt19937 mt(1234);
@@ -57,14 +66,17 @@ double find_roots(int size)
 	}
 	while (is_above(delta, 1e-16)); // check condition
 	
-	//  p = p/(x-z)
+	//  q = q/(x-z)
 	complex_t v = q[n - 1];
 	q[n - 1] = 0;
 	for (long long i = n - 2; i >= 0; i--)
 	{
+		auto c = q[i];
 		q[i] = v;
-		v = v * z + q[i];
-	}	
+		v = v * z + c;
+	}
+	multiply(q, n-1, z);
+
 	return 1234.0;
 
 }
