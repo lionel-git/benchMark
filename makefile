@@ -1,4 +1,4 @@
-SOURCEFILES = benchMark.cpp fft_example.cpp invert_matrix.cpp
+SOURCEFILES = benchMark.cpp fft_example.cpp invert_matrix.cpp polynom.cpp
 DEPFILES = $(SOURCEFILES) features_check.h
 
 all : benchMark benchMark_clang
