@@ -21,7 +21,7 @@ bool is_above(complex_t z, double epsilon)
 }
 
 // Show p(z).(z-c)
-void multiply(const polynom_t& q, int n, complex_t c)
+void multiply(const polynom_t& q, long long n, complex_t c)
 {
 	std::cout << 0 << ": " << -q[0] * c << std::endl;
 	for (long long i = 1; i < n ; i++)
@@ -43,39 +43,44 @@ double find_roots(int size)
 	p0[p0.size() - 1] = 1; // leading coeff = 1
 
 	// Starting point
-	complex_t z(distribution(mt), distribution(mt));
+	complex_t z0(0.0, 0.0);
 
 	polynom_t q = p0;
 	long long n = p0.size();
-
-	// Newton solve
-	complex_t delta;
 	do
 	{
-		// Eval v = p(z) & d = p'(z)
+		auto z = z0;
+		// Newton solve
+		complex_t delta;
+		do
+		{
+			std::cout << z << std::endl;
+			// Eval v = p(z) & d = p'(z)
+			complex_t v = q[n - 1];
+			complex_t d = 0;
+			for (long long i = n - 2; i >= 0; i--)
+			{
+				v = v * z + q[i];
+				d = d * z + ((double)(i + 1)) * q[i + 1];
+			}
+			delta = v / d;
+			z = z - delta;			
+		} while (is_above(delta, 1e-16)); // check condition
+		std::cout << "root: " << z << std::endl;
+
+		//  q = q/(x-z)
 		complex_t v = q[n - 1];
-		complex_t d = 0;
+		q[n - 1] = 0;
 		for (long long i = n - 2; i >= 0; i--)
 		{
-			v = v * z + q[i];
-			d = d * z + ((double)(i + 1)) * q[i + 1];
+			auto c = q[i];
+			q[i] = v;
+			v = v * z + c;
 		}
-		delta = v / d;
-		z = z - delta;
-		std::cout << z << std::endl;
-	}
-	while (is_above(delta, 1e-16)); // check condition
-	
-	//  q = q/(x-z)
-	complex_t v = q[n - 1];
-	q[n - 1] = 0;
-	for (long long i = n - 2; i >= 0; i--)
-	{
-		auto c = q[i];
-		q[i] = v;
-		v = v * z + c;
-	}
-	multiply(q, n-1, z);
+		n--;
+		multiply(q, n, z);
+	} 
+	while (n >= 2);
 
 	return 1234.0;
 
