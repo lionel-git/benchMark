@@ -3,6 +3,8 @@
 #include <random>
 #include <iostream>
 
+static bool debug_polynom = false;
+
 typedef std::complex<double> complex_t;
 typedef std::vector<std::complex<double>> polynom_t;
 
@@ -85,7 +87,8 @@ double find_roots(int size)
 		complex_t delta;
 		do
 		{
-			std::cout << z << std::endl;
+			if (debug_polynom)
+				std::cout << z << std::endl;
 			// Eval v = p(z) & d = p'(z)
 			complex_t v = q[n - 1];
 			complex_t d = 0;
@@ -109,7 +112,8 @@ double find_roots(int size)
 			v = v * z + c;
 		}
 		n--;
-		multiply(q, n, z);
+		if (debug_polynom)
+			multiply(q, n, z);
 	} 
 	while (n >= 2);
 

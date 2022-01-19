@@ -206,9 +206,10 @@ void benchMatrix(double size, double a, long long& total)
 
 void benchPolynom(double size, double a, long long& total)
 {
-	
-	auto distance = find_roots((int)size);
-	total = (long long)(distance * 1e10);
+	double distance = 0.0;
+	for (int i=0;i<(int)a;i++)
+		distance += find_roots((int)size);
+	total = (long long)(distance * 1e15);
 }
 
 // == Utils for bench ================================================
@@ -253,8 +254,6 @@ void bench_threads(const std::string& func_name, double dx, double dy, void (*be
 int main(int argc, char** argv)
 {
 	std::cout << "Starting..." << std::endl;
-
-	std::cout << find_roots(30) << std::endl; return 0;
 
 #if defined(_MSC_FULL_VER)
 	std::cout << "MSC_FULL_VER: " << _MSC_FULL_VER << std::endl;
@@ -309,6 +308,6 @@ int main(int argc, char** argv)
 		if ((strcmp(argv[i], "Matrix") == 0) || doAll)
 			bench_threads("benchMatrix", 1000, 0.0, benchMatrix);
 		if ((strcmp(argv[i], "Polynom") == 0) || doAll)
-			bench_threads("benchPolynom", 3, 0.0, benchPolynom);
+			bench_threads("benchPolynom", 150, 1000, benchPolynom);
 	}
 }
