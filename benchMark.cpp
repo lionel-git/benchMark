@@ -11,8 +11,8 @@
 #include "features_check.h"
 
 extern void FFT(int dir, long m, std::complex<double> x[]);
-
 extern double invert_matrix(int size);
+extern double find_roots(int size);
 
 long iterate(double cx, double cy, int max)
 {
@@ -204,6 +204,13 @@ void benchMatrix(double size, double a, long long& total)
 	total = (long long)(distance * 1e10);
 }
 
+void benchPolynom(double size, double a, long long& total)
+{
+	
+	auto distance = find_roots((int)size);
+	total = (long long)(distance * 1e10);
+}
+
 // == Utils for bench ================================================
 
 // Avoid optimiser to call start/end before benchMark runs ...
@@ -280,7 +287,7 @@ int main(int argc, char** argv)
 
 	if (argc == 1)
 	{
-		std::cout << "Syntax: " << argv[0] << " (Mandel, Mandel2, Heat, Pi, Fft, Matrix, All)" << std::endl;
+		std::cout << "Syntax: " << argv[0] << " (Mandel, Mandel2, Heat, Pi, Fft, Matrix, Polynom, All)" << std::endl;
 		return 0;
 	}
 
@@ -299,5 +306,7 @@ int main(int argc, char** argv)
 			bench_threads("benchFft", 24, 0.1234, benchFft);
 		if ((strcmp(argv[i], "Matrix") == 0) || doAll)
 			bench_threads("benchMatrix", 1000, 0.0, benchMatrix);
+		if ((strcmp(argv[i], "Polynom") == 0) || doAll)
+			bench_threads("benchPolynom", 3, 0.0, benchPolynom);
 	}
 }

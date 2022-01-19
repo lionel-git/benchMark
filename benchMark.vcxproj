@@ -92,17 +92,17 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='avx512|x64'">
     <OutDir>$(SolutionDir)\Exes\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\$(PlatformToolset)\</IntDir>
-	<TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Avx2|x64'">
     <OutDir>$(SolutionDir)\Exes\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\$(PlatformToolset)\</IntDir>
-	<TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Avx|x64'">
     <OutDir>$(SolutionDir)\Exes\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\$(PlatformToolset)\</IntDir>
-	<TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnabled>false</VcpkgEnabled>
@@ -192,6 +192,7 @@
     <ClCompile Include="benchMark.cpp" />
     <ClCompile Include="fft_example.cpp" />
     <ClCompile Include="invert_matrix.cpp" />
+    <ClCompile Include="polynom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="makefile" />
