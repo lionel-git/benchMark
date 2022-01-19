@@ -254,7 +254,7 @@ int main(int argc, char** argv)
 {
 	std::cout << "Starting..." << std::endl;
 
-	// auto distance = find_roots((int)3); return 0;
+	auto distance = find_roots((int)3); return 0;
 
 #if defined(_MSC_FULL_VER)
 	std::cout << "MSC_FULL_VER: " << _MSC_FULL_VER << std::endl;

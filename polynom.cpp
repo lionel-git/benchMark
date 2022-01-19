@@ -15,9 +15,14 @@ static complex_t eval(const polynom_t& p, complex_t z)
 	return v;
 }
 
-bool is_above(complex_t z, double epsilon)
+double N2(const complex_t& z)
 {
-	return z.real() * z.real() + z.imag() * z.imag() > epsilon;
+	return z.real() * z.real() + z.imag() * z.imag();
+}
+
+bool is_above(const complex_t& z, double epsilon)
+{
+	return N2(z) > epsilon;
 }
 
 // Show p(z).(z-c)
@@ -27,6 +32,30 @@ void multiply(const polynom_t& q, long long n, complex_t c)
 	for (long long i = 1; i < n ; i++)
 		std::cout << i << ": " << q[i - 1] - q[i] * c << std::endl;
 	std::cout << n << ": " << q[n - 1] << std::endl;
+}
+
+// Regenerate polynom: product(X-ri)
+double distance_product(const std::vector<complex_t>& roots, const polynom_t& p0)
+{
+	polynom_t q(roots.size()+1);
+	q[0] = -roots[0];
+	q[1] = 1;
+	// q(z) <= q(z).(z-ri)
+	for (size_t j = 1; j < roots.size(); j++)
+	{
+		q[j + 1] = q[j];		
+		for (long long i = j; i >=1 ; i--)
+		{ 
+			q[i] = q[i - 1] - q[i] * roots[j];
+		}
+		q[0] = -q[0] * roots[j];
+	}
+	if (p0.size() != q.size())
+		throw std::runtime_error("Sizes are differents: " + std::to_string(p0.size()) + " " + std::to_string(q.size()));
+	double diff = 0;
+	for (size_t j = 0; j < p0.size(); j++)
+		diff += N2(p0[j] - q[j]);
+	return diff;
 }
 
 double find_roots(int size)
@@ -41,6 +70,8 @@ double find_roots(int size)
 		p0[i].imag(distribution(mt));
 	}
 	p0[p0.size() - 1] = 1; // leading coeff = 1
+
+	std::vector<complex_t> roots;
 
 	// Starting point
 	complex_t z0(0.0, 0.0);
@@ -66,7 +97,7 @@ double find_roots(int size)
 			delta = v / d;
 			z = z - delta;			
 		} while (is_above(delta, 1e-16)); // check condition
-		std::cout << "root: " << z << std::endl;
+		roots.push_back(z);
 
 		//  q = q/(x-z)
 		complex_t v = q[n - 1];
@@ -82,6 +113,5 @@ double find_roots(int size)
 	} 
 	while (n >= 2);
 
-	return 1234.0;
-
+	return distance_product(roots, p0);
 }
