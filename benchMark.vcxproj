@@ -193,12 +193,14 @@
     <ClCompile Include="fft_example.cpp" />
     <ClCompile Include="invert_matrix.cpp" />
     <ClCompile Include="polynom.cpp" />
+    <ClCompile Include="polynom2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="makefile" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="features_check.h" />
+    <ClInclude Include="polynom2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

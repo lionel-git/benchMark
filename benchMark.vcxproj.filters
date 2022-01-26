@@ -27,6 +27,9 @@
     <ClCompile Include="polynom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="polynom2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="makefile">
@@ -35,6 +38,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="features_check.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="polynom2.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
