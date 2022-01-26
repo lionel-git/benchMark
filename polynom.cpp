@@ -60,9 +60,9 @@ double distance_product(const std::vector<complex_t>& roots, const polynom_t& p0
 	return diff;
 }
 
-double find_roots(int size)
+double find_roots(int size, int seed)
 {
-	std::mt19937 mt(1234);
+	std::mt19937 mt(seed);
 	std::uniform_real_distribution<double> distribution(-1.0, 1.0);
 
 	polynom_t p0(size);
@@ -76,7 +76,7 @@ double find_roots(int size)
 	std::vector<complex_t> roots;
 
 	// Starting point
-	complex_t z0(0.0, 0.0);
+	complex_t z0(0.0, 1.0);
 
 	polynom_t q = p0;
 	long long n = p0.size();

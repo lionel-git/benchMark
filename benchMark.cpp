@@ -12,7 +12,7 @@
 
 extern void FFT(int dir, long m, std::complex<double> x[]);
 extern double invert_matrix(int size);
-extern double find_roots(int size);
+extern double find_roots(int size, int seed);
 
 long iterate(double cx, double cy, int max)
 {
@@ -208,7 +208,7 @@ void benchPolynom(double size, double a, long long& total)
 {
 	double distance = 0.0;
 	for (int i=0;i<(int)a;i++)
-		distance += find_roots((int)size);
+		distance += find_roots((int)size, 1234);
 	total = (long long)(distance * 1e15);
 }
 
@@ -250,10 +250,22 @@ void bench_threads(const std::string& func_name, double dx, double dy, void (*be
 		bench(threads, func_name, dx, dy, bench_func);
 }
 
+void test_polynom()
+{
+	for (int s = 0; s < 100; s++)
+	{
+		double res = find_roots(150, s);
+		std::cout << "res" << s << ": " << res << std::endl;
+	}
+}
+
+
 // Warning: feature check will not run if specific instructions are used for prologue
 int main(int argc, char** argv)
 {
 	std::cout << "Starting..." << std::endl;
+
+	//test_polynom(); return 0;
 
 #if defined(_MSC_FULL_VER)
 	std::cout << "MSC_FULL_VER: " << _MSC_FULL_VER << std::endl;
