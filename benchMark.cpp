@@ -333,6 +333,6 @@ int main(int argc, char** argv)
 		if ((strcmp(argv[i], "Matrix") == 0) || doAll)
 			bench_threads("benchMatrix", 1000, 0.0, benchMatrix);
 		if ((strcmp(argv[i], "Polynom") == 0) || doAll)
-			bench_threads("benchPolynom", 150, 1000, benchPolynom);
+			bench_threads("benchPolynom", 150, 5000, benchPolynom);
 	}
 }
