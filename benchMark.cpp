@@ -255,11 +255,11 @@ void bench_threads(const std::string& func_name, double dx, double dy, void (*be
 void test_polynom()
 {
 	double res;
-	for (int s = 0; s < 100; s++)
+	for (int s = 0; s < 1000; s++)
 	{
 		polynom2 p(s);
 		res = p.find_roots(150);
-		std::cout << "res" << s << ": " << res << std::endl << std::endl;
+		std::cout << "res" << s << ": " << res << std::endl;
 	}
 }
 
@@ -276,7 +276,7 @@ int main(int argc, char** argv)
 {
 	std::cout << "Starting..." << std::endl;
 
-	test_polynom0(); return 0;
+	test_polynom(); return 0;
 
 #if defined(_MSC_FULL_VER)
 	std::cout << "MSC_FULL_VER: " << _MSC_FULL_VER << std::endl;

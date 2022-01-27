@@ -21,6 +21,7 @@ private:
 	static double distance_product(const std::vector<complex_t>& roots, const polynom_t& p0);
 
 	complex_t get_random_point();
+	complex_t get_random_unit();
 
 private:
 	std::mt19937 mt_;

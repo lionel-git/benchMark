@@ -13,6 +13,13 @@ polynom2::get_random_point()
 	return complex_t(real, imag);
 }
 
+complex_t 
+polynom2::get_random_unit()
+{
+	auto theta = distribution_(mt_) * 3.14159;
+	return complex_t(cos(theta), sin(theta));
+}
+
 double
 polynom2::find_roots(int size)
 {
@@ -23,36 +30,37 @@ polynom2::find_roots(int size)
 
 	std::vector<complex_t> roots;
 
-	// Starting point
-	complex_t z0(0.0, 1.0);
-
 	polynom_t q = p0;
 	long long n = p0.size();
 	do
 	{
-		auto z = z0;
+		complex_t z;
 		// Newton solve
 		complex_t delta;
 		complex_t v;
 		complex_t d;
+
 		do
 		{
-			if (debug_)
-				std::cout << z << std::endl;
-			// Eval v = p(z) & d = p'(z)
-			v = q[n - 1];
-			d = 0;
-			for (long long i = n - 2; i >= 0; i--)
+			// Starting point
+			z = get_random_unit();
+			do
 			{
-				v = v * z + q[i];
-				d = d * z + ((double)(i + 1)) * q[i + 1];
-			}
-			delta = v / d;
-			z = z - delta;
-		} while (is_above(delta, 1e-16)); // check condition
+				if (debug_)
+					std::cout << z << std::endl;
+				// Eval v = p(z) & d = p'(z)
+				v = q[n - 1];
+				d = 0;
+				for (long long i = n - 2; i >= 0; i--)
+				{
+					v = v * z + q[i];
+					d = d * z + ((double)(i + 1)) * q[i + 1];
+				}
+				delta = v / d;
+				z = z - delta;
+			} while (is_above(delta, 1e-16)); // check condition
 
-		if (is_above(v, 1000))
-			std::cout << v << std::endl;
+		} while (is_above(v, 10));
 
 		roots.push_back(z);
 
