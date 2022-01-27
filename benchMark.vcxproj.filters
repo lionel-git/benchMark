@@ -24,9 +24,6 @@
     <ClCompile Include="invert_matrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="polynom.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="polynom2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -192,7 +192,6 @@
     <ClCompile Include="benchMark.cpp" />
     <ClCompile Include="fft_example.cpp" />
     <ClCompile Include="invert_matrix.cpp" />
-    <ClCompile Include="polynom.cpp" />
     <ClCompile Include="polynom2.cpp" />
   </ItemGroup>
   <ItemGroup>

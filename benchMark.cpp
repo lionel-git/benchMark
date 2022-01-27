@@ -14,7 +14,6 @@
 
 extern void FFT(int dir, long m, std::complex<double> x[]);
 extern double invert_matrix(int size);
-extern double find_roots(int size, int seed);
 
 long iterate(double cx, double cy, int max)
 {
@@ -209,8 +208,11 @@ void benchMatrix(double size, double a, long long& total)
 void benchPolynom(double size, double a, long long& total)
 {
 	double distance = 0.0;
-	for (int i=0;i<(int)a;i++)
-		distance += find_roots((int)size, 1234);
+	for (int i = 0; i < (int)a; i++)
+	{
+		polynom2 p(1234);
+		distance += p.find_roots((int)size);
+	}
 	total = (long long)(distance * 1e15);
 }
 
@@ -276,7 +278,7 @@ int main(int argc, char** argv)
 {
 	std::cout << "Starting..." << std::endl;
 
-	test_polynom(); return 0;
+	//test_polynom(); return 0;
 
 #if defined(_MSC_FULL_VER)
 	std::cout << "MSC_FULL_VER: " << _MSC_FULL_VER << std::endl;
