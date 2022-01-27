@@ -265,7 +265,7 @@ void test_polynom()
 		polynom2 p(s);
 		res = p.find_roots(150);
 		std::cout << " : " << res << std::endl;
-		maximum = max(maximum, res);
+		maximum = std::max(maximum, res);
 	}
 	std::cout << "max=" << maximum << std::endl;
 }
