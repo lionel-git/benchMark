@@ -257,21 +257,26 @@ void test_polynom()
 	double res;
 	for (int s = 0; s < 100; s++)
 	{
-		res = find_roots(150, s);
-		std::cout << "res" << s << ": " << res << std::endl;
 		polynom2 p(s);
 		res = p.find_roots(150);
 		std::cout << "res" << s << ": " << res << std::endl << std::endl;
 	}
 }
 
+void test_polynom0()
+{
+	int s = 13;
+	polynom2 p(s);
+	auto res = p.find_roots(150);
+	std::cout << "res" << s << ": " << res << std::endl << std::endl;
+}
 
 // Warning: feature check will not run if specific instructions are used for prologue
 int main(int argc, char** argv)
 {
 	std::cout << "Starting..." << std::endl;
 
-	test_polynom(); return 0;
+	test_polynom0(); return 0;
 
 #if defined(_MSC_FULL_VER)
 	std::cout << "MSC_FULL_VER: " << _MSC_FULL_VER << std::endl;

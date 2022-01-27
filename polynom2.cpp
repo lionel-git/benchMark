@@ -33,13 +33,15 @@ polynom2::find_roots(int size)
 		auto z = z0;
 		// Newton solve
 		complex_t delta;
+		complex_t v;
+		complex_t d;
 		do
 		{
 			if (debug_)
 				std::cout << z << std::endl;
 			// Eval v = p(z) & d = p'(z)
-			complex_t v = q[n - 1];
-			complex_t d = 0;
+			v = q[n - 1];
+			d = 0;
 			for (long long i = n - 2; i >= 0; i--)
 			{
 				v = v * z + q[i];
@@ -48,10 +50,17 @@ polynom2::find_roots(int size)
 			delta = v / d;
 			z = z - delta;
 		} while (is_above(delta, 1e-16)); // check condition
+
+		if (is_above(v, 1000))
+			std::cout << v << std::endl;
+
 		roots.push_back(z);
 
+
+
+
 		//  q = q/(x-z)
-		complex_t v = q[n - 1];
+		v = q[n - 1];
 		q[n - 1] = 0;
 		for (long long i = n - 2; i >= 0; i--)
 		{
