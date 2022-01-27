@@ -210,7 +210,7 @@ void benchPolynom(double size, double a, long long& total)
 	double distance = 0.0;
 	for (int i = 0; i < (int)a; i++)
 	{
-		polynom2 p(1234);
+		polynom2 p(i);
 		distance += p.find_roots((int)size);
 	}
 	total = (long long)(distance * 1e15);
@@ -257,17 +257,22 @@ void bench_threads(const std::string& func_name, double dx, double dy, void (*be
 void test_polynom()
 {
 	double res;
-	for (int s = 0; s < 1000; s++)
+	double maximum = -1;
+	for (int s = 0; s < 5000; s++)
 	{
+		std::cout << s;
+		std::cout.flush();
 		polynom2 p(s);
 		res = p.find_roots(150);
-		std::cout << "res" << s << ": " << res << std::endl;
+		std::cout << " : " << res << std::endl;
+		maximum = max(maximum, res);
 	}
+	std::cout << "max=" << maximum << std::endl;
 }
 
 void test_polynom0()
 {
-	int s = 13;
+	int s = 656;
 	polynom2 p(s);
 	auto res = p.find_roots(150);
 	std::cout << "res" << s << ": " << res << std::endl << std::endl;

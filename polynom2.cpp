@@ -40,8 +40,10 @@ polynom2::find_roots(int size)
 		complex_t v;
 		complex_t d;
 
+		int max_try_start = 100;
 		do
 		{
+			int max_steps = 1000;
 			// Starting point
 			z = get_random_unit();
 			do
@@ -58,9 +60,24 @@ polynom2::find_roots(int size)
 				}
 				delta = v / d;
 				z = z - delta;
-			} while (is_above(delta, 1e-16)); // check condition
+			} while (is_above(delta, 1e-16) && --max_steps>0); // check condition
 
-		} while (is_above(v, 10));
+			if (debug_ && max_steps <= 0)
+			{
+				std::cout << "==max step reached" << std::endl;
+			}
+
+		} while (is_above(v, 1e-6) && --max_try_start>0);
+
+		if (debug_ && max_try_start <= 0)
+			std::cout << "==== Solution approx" << std::endl;
+
+		/*auto l2 = N2(eval(p0, z));
+		std::cout << l2 << std::endl;
+		if (l2 >= 1)
+		{
+			int a = 1;
+		}*/
 
 		roots.push_back(z);
 
