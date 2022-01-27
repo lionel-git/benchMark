@@ -10,6 +10,8 @@
 
 #include "features_check.h"
 
+#include "polynom2.h"
+
 extern void FFT(int dir, long m, std::complex<double> x[]);
 extern double invert_matrix(int size);
 extern double find_roots(int size, int seed);
@@ -252,10 +254,14 @@ void bench_threads(const std::string& func_name, double dx, double dy, void (*be
 
 void test_polynom()
 {
+	double res;
 	for (int s = 0; s < 100; s++)
 	{
-		double res = find_roots(150, s);
+		res = find_roots(150, s);
 		std::cout << "res" << s << ": " << res << std::endl;
+		polynom2 p(s);
+		res = p.find_roots(150);
+		std::cout << "res" << s << ": " << res << std::endl << std::endl;
 	}
 }
 
@@ -265,7 +271,7 @@ int main(int argc, char** argv)
 {
 	std::cout << "Starting..." << std::endl;
 
-	//test_polynom(); return 0;
+	test_polynom(); return 0;
 
 #if defined(_MSC_FULL_VER)
 	std::cout << "MSC_FULL_VER: " << _MSC_FULL_VER << std::endl;

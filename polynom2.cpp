@@ -1,17 +1,70 @@
 #include "polynom2.h"
 #include <iostream>
 
-polynom2::polynom2(int seed) : mt_(seed), distribution_(-1.0, 1.0)
+polynom2::polynom2(int seed, bool debug) : mt_(seed), distribution_(-1.0, 1.0), debug_(debug)
 {
 }
 
+complex_t 
+polynom2::get_random_point()
+{
+	double real = distribution_(mt_);
+	double imag = distribution_(mt_);
+	return complex_t(real, imag);
+}
 
 double
-polynom2::find_roots(int n)
+polynom2::find_roots(int size)
 {
+	polynom_t p0(size);
+	for (int i = 0; i < p0.size() - 1; i++)
+		p0[i] = get_random_point();
+	p0[p0.size() - 1] = 1; // leading coeff = 1
 
+	std::vector<complex_t> roots;
 
+	// Starting point
+	complex_t z0(0.0, 1.0);
 
+	polynom_t q = p0;
+	long long n = p0.size();
+	do
+	{
+		auto z = z0;
+		// Newton solve
+		complex_t delta;
+		do
+		{
+			if (debug_)
+				std::cout << z << std::endl;
+			// Eval v = p(z) & d = p'(z)
+			complex_t v = q[n - 1];
+			complex_t d = 0;
+			for (long long i = n - 2; i >= 0; i--)
+			{
+				v = v * z + q[i];
+				d = d * z + ((double)(i + 1)) * q[i + 1];
+			}
+			delta = v / d;
+			z = z - delta;
+		} while (is_above(delta, 1e-16)); // check condition
+		roots.push_back(z);
+
+		//  q = q/(x-z)
+		complex_t v = q[n - 1];
+		q[n - 1] = 0;
+		for (long long i = n - 2; i >= 0; i--)
+		{
+			auto c = q[i];
+			q[i] = v;
+			v = v * z + c;
+		}
+		n--;
+		if (debug_)
+			multiply(q, n, z);
+	} while (n >= 2);
+
+	return distance_product(roots, p0);
 }
 
 complex_t 

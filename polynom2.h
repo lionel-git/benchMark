@@ -9,7 +9,7 @@ typedef std::vector<std::complex<double>> polynom_t;
 class polynom2
 {
 public:
-	polynom2(int seed);
+	polynom2(int seed, bool debug = false);
 	double find_roots(int n);
 
 	// Static utils
@@ -20,8 +20,10 @@ private:
 	static void multiply(const polynom_t& q, long long n, complex_t c);
 	static double distance_product(const std::vector<complex_t>& roots, const polynom_t& p0);
 
+	complex_t get_random_point();
+
 private:
 	std::mt19937 mt_;
 	std::uniform_real_distribution<double> distribution_;
-
+	bool debug_;
 };
