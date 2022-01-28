@@ -20,6 +20,23 @@ bool check_avx512()
 	return IsProcessorFeaturePresent(PF_AVX512F_INSTRUCTIONS_AVAILABLE);
 }
 
+#elif defined(__arm__)
+
+bool check_avx()
+{
+	return false;
+}
+
+bool check_avx2()
+{
+  	return false;
+}
+
+bool check_avx512()
+{
+  	return false;
+}
+
 #else
 
 // https://gcc.gnu.org/onlinedocs/gcc/x86-Built-in-Functions.html
