@@ -335,6 +335,7 @@ benchMark_clang
 test_mingw64_dynamic.exe
 test_mingw64_static.exe
 analysis.txt
+hwinfo.txt
 
 /.vscode
 /Exes
