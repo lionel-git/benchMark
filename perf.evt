@@ -1,0 +1,10 @@
+branch-instructions
+branch-misses
+uops_dispatched_port.port_0
+uops_dispatched_port.port_1
+uops_dispatched_port.port_2
+uops_dispatched_port.port_3
+uops_dispatched_port.port_4
+uops_dispatched_port.port_5
+uops_dispatched_port.port_6
+uops_dispatched_port.port_7
