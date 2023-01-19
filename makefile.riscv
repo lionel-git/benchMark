@@ -1,0 +1,13 @@
+SOURCEFILES = benchMark.cpp fft_example.cpp invert_matrix.cpp polynom2.cpp
+DEPFILES = $(SOURCEFILES) features_check.h polynom2.h
+
+all : benchMark #benchMark_clang
+
+benchMark: $(DEPFILES)
+	g++ -O3 -D__riscv__ -march=rv64imafdc $(SOURCEFILES) -lpthread -o benchMark
+
+benchMark_clang: $(DEPFILES)
+	clang++ -D__riscv__ -O3 $(SOURCEFILES) -lpthread -o benchMark_clang
+
+clean:
+	rm -f benchMark benchMark_clang

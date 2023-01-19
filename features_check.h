@@ -20,7 +20,7 @@ bool check_avx512()
 	return IsProcessorFeaturePresent(PF_AVX512F_INSTRUCTIONS_AVAILABLE);
 }
 
-#elif defined(__arm__)
+#elif defined(__arm__) || defined(__riscv__)
 
 bool check_avx()
 {
