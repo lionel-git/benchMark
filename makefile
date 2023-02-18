@@ -7,7 +7,7 @@ benchMark: $(DEPFILES)
 	g++ -O3 -march=native -Wall -Wpedantic $(SOURCEFILES) -lpthread -o benchMark
 
 benchMark_clang: $(DEPFILES)
-	clang++ -O3 -Weverything -Wno-c++98-compat -Wno-missing-prototypes -Wno-c++98-compat-pedantic $(SOURCEFILES) -lpthread -o benchMark_clang
+	clang++ -O3 -march=native -Weverything -Wno-c++98-compat -Wno-missing-prototypes -Wno-c++98-compat-pedantic $(SOURCEFILES) -lpthread -o benchMark_clang
 
 #-Weverything
 #-Wc++98-compat
