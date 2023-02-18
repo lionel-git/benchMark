@@ -340,4 +340,4 @@ callgrind.out.*
 
 /.vscode
 /Exes
-defines_g++.txt
+_defines*.txt

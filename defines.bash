@@ -1,5 +1,6 @@
 #!/bin/bash
-TARGET=defines_g++.txt
-g++ -dM -E - < /dev/null > ${TARGET}
-echo "=========="       >> ${TARGET}
-g++ -Q --help=target    >> ${TARGET}
+TARGET=_defines
+g++ -dM -E - < /dev/null               > ${TARGET}.txt
+g++               -Q --help=target     > ${TARGET}.default.txt
+g++ -march=native -Q --help=target     > ${TARGET}.native.txt
+
