@@ -13,7 +13,7 @@
 #include "polynom2.h"
 
 extern void FFT(int dir, long m, std::complex<double> x[]);
-extern double invert_matrix(int size);
+extern double invert_matrix(size_t size);
 
 long iterate(double cx, double cy, int max)
 {

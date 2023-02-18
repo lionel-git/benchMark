@@ -24,7 +24,7 @@ double
 polynom2::find_roots(int size)
 {
 	polynom_t p0(size);
-	for (int i = 0; i < p0.size() - 1; i++)
+	for (size_t i = 0; i < p0.size() - 1; i++)
 		p0[i] = get_random_point();
 	p0[p0.size() - 1] = 1; // leading coeff = 1
 

@@ -10,12 +10,12 @@ typedef std::vector<std::vector<double>> matrix_t;
 static double spread_identity_multiply_matrix(const matrix_t& m1, int shift_colm1, const matrix_t& m2, int shift_colm2)
 {
 	double distance = 0.0;
-	for (int i = 0; i < m1.size(); i++)
+	for (size_t i = 0; i < m1.size(); i++)
 	{
-		for (int j = 0; j < m1.size(); j++)
+		for (size_t j = 0; j < m1.size(); j++)
 		{
 			double s = 0.0;
-			for (int k = 0; k < m1.size(); k++)
+			for (size_t k = 0; k < m1.size(); k++)
 				s += m1[i][k + shift_colm1] * m2[k][j + shift_colm2];
 			if (i == j)
 				distance += fabs(s - 1.0);
@@ -31,10 +31,9 @@ static void show_matrix(const matrix_t& m)
 	if (debug_matrix)
 	{
 		std::cout << "=========================" << std::endl;
-		int k = 0;
-		for (int i = 0; i < m.size(); i++)
+		for (size_t i = 0; i < m.size(); i++)
 		{
-			for (int j = 0; j < 2 * m.size(); j++)
+			for (size_t j = 0; j < 2 * m.size(); j++)
 			{
 				std::cout << std::left << std::setprecision(3) << std::setw(8) << m[i][j] << " ";
 			}
@@ -44,16 +43,16 @@ static void show_matrix(const matrix_t& m)
 	}
 }
 
-double invert_matrix(int size)
+double invert_matrix(size_t size)
 {
 	std::mt19937 mt(1234);
 	std::uniform_real_distribution<double> distribution(0.0, 1.0);
 
 	matrix_t m;
-	for (int i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		std::vector<double> row(2 * size);
-		for (int j = 0; j < size; j++)
+		for (size_t j = 0; j < size; j++)
 		{
 			row[j] = distribution(mt);
 			if (i == j)
@@ -67,14 +66,14 @@ double invert_matrix(int size)
 
 	auto m0 = m;
 
-	int pivot = 0;
+	size_t pivot = 0;
 
 	while (pivot < size)
 	{
 		// Search max abs value on pivot column
 		double max = fabs(m[pivot][pivot]);
-		int row_max = pivot;
-		for (int i = pivot + 1; i < size; i++)
+		size_t row_max = pivot;
+		for (size_t i = pivot + 1; i < size; i++)
 		{
 			if (fabs(m[i][pivot]) > max)
 			{
@@ -90,12 +89,12 @@ double invert_matrix(int size)
 		show_matrix(m);
 
 		double v = m[pivot][pivot];
-		for (int i = 0; i < size; i++)
+		for (size_t i = 0; i < size; i++)
 		{
 			if (i != pivot)
 			{
 				double mult = m[i][pivot] / v;
-				for (int j = 0; j < 2 * size; j++)
+				for (size_t j = 0; j < 2 * size; j++)
 					m[i][j] -= m[pivot][j] * mult;
 			}
 		}
@@ -103,10 +102,10 @@ double invert_matrix(int size)
 		pivot++;
 	}
 
-	for (int i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		double mult = 1.0 / m[i][i];
-		for (int j = 0; j < 2 * size; j++)
+		for (size_t j = 0; j < 2 * size; j++)
 			m[i][j] *= mult;
 	}
 	show_matrix(m);
