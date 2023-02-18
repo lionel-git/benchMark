@@ -96,7 +96,7 @@ void benchMandel2(double dx, double dy, long long& total)
 }
 
 
-void benchHeat(double dx, double dy, long long& ret)
+void benchHeat(double dx, double /* dy */, long long& ret)
 {
 	int nx = (int)(10.0 / dx);
 	int ny = (int)(10.0 / dx);
@@ -153,7 +153,7 @@ void benchHeat(double dx, double dy, long long& ret)
 	delete[] values2;
 }
 
-void benchPi(double dx, double dy, long long& ret)
+void benchPi(double dx, double /* dy */, long long& ret)
 {
 	double sum = 0.0;
 	for (double x = 0.0; x < 1.0; x += dx)
