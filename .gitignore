@@ -341,3 +341,4 @@ callgrind.out.*
 /.vscode
 /Exes
 _defines*.txt
+.gdb_history
