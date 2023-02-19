@@ -1,0 +1,6 @@
+
+MACHINE=$(shell /usr/bin/uname -m)
+
+all:
+	echo $(MACHINE)
+
