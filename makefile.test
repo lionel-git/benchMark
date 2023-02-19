@@ -1,5 +1,17 @@
 
+
+MACHINE=toto
+$(info machine1 ='$(MACHINE)')
+
+MACHINE=
+$(info machine2 ='$(MACHINE)')
+
 MACHINE=$(shell /usr/bin/uname -m)
+$(info machine3 ='$(MACHINE)')
+
+$(warning test)
+$(error unsupported: '$(MACHINE)')
+$(info test2)
 
 all:
 	echo $(MACHINE)
