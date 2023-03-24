@@ -1,5 +1,6 @@
 #!/bin/bash
-CMD="cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_cur_freq"
+CPUFREQFILE=scaling_cur_freq
+CMD="cat /sys/devices/system/cpu/cpu*/cpufreq/${CPUFREQFILE}"
 VCGENCMD=/usr/bin/vcgencmd
 if [ -f ${VCGENCMD} ]
 then
