@@ -340,6 +340,7 @@ int effective_main(int argc, char** argv)
 		if ((strcmp(argv[i], "Polynom") == 0) || doAll)
 			bench_threads("benchPolynom", 150, 5000, benchPolynom);
 	}
+    return 0;
 }
 
 void parseOption(int argc, char** argv, bool& throwFPE)
