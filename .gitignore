@@ -332,6 +332,8 @@ ASALocalRun/
 #My files
 benchMark
 benchMark_clang
+benchMark_icx
+perf.data
 test_mingw64_dynamic.exe
 test_mingw64_static.exe
 analysis.txt
