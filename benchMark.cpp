@@ -314,8 +314,12 @@ int effective_main(int argc, char** argv)
 
 #if defined (__clang_major__)
 	std::cout << "Clang compiler: " << __clang_major__ << "." << __clang_minor__ << "." << __clang_patchlevel__ << std::endl;
-#endif 
-
+#endif
+	
+#if defined (__INTEL_LLVM_COMPILER)
+         std::cout << "Intel LLVM compiler: " << __VERSION__ << std::endl;
+#endif	
+	
 	if (argc == 1)
 	{
 		std::cout << "Syntax: " << argv[0] << " (Mandel, Mandel2, Heat, Pi, Fft, Matrix, Polynom, All)" << std::endl;
