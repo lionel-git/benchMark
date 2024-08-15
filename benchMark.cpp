@@ -279,7 +279,7 @@ void test_polynom0()
 }
 
 // Warning: feature check will not run if specific instructions are used for prologue
-int main(int argc, char** argv)
+int effective_main(int argc, char** argv)
 {
 	std::cout << "Starting..." << std::endl;
 
@@ -340,4 +340,134 @@ int main(int argc, char** argv)
 		if ((strcmp(argv[i], "Polynom") == 0) || doAll)
 			bench_threads("benchPolynom", 150, 5000, benchPolynom);
 	}
+}
+
+void parseOption(int argc, char** argv, bool& throwFPE)
+{
+    for (int i = 0; i < argc; i++)
+    {
+        if (argv[i] == std::string_view("-throwfpe"))
+            throwFPE = true;
+    }
+}
+
+#if defined(_WIN32)
+void setThrowFPE()
+{
+    unsigned int cw;
+    _controlfp_s(&cw, 0, 0);
+    unsigned int new_value = cw & ~(_EM_ZERODIVIDE | _EM_INVALID | _EM_OVERFLOW);
+    _controlfp_s(&cw, new_value, _MCW_EM);
+    std::cout << "**** Throw FPE activated ****" << std::endl;
+}
+
+int filter_exception(unsigned int code, struct _EXCEPTION_POINTERS* ep)
+{
+    std::cout << "Exception code: 0x" << std::hex << code;
+    if (ep != nullptr && ep->ExceptionRecord != nullptr)
+        std::cout << ", Address=0x" << (void*)ep->ExceptionRecord->ExceptionAddress;
+    std::cout << " : ";
+    switch(code)
+    {
+    case  EXCEPTION_ACCESS_VIOLATION:
+        std::cout << "Acess Violation" << std::endl;
+        break;
+    case  EXCEPTION_DATATYPE_MISALIGNMENT:
+        std::cout << "Data Type MisAlignement" << std::endl;
+        break;
+    case  EXCEPTION_BREAKPOINT:
+        std::cout << "Breakpoint" << std::endl;
+        break;
+    case  EXCEPTION_SINGLE_STEP:
+        std::cout << "Single Step" << std::endl;
+        break;
+    case  EXCEPTION_ARRAY_BOUNDS_EXCEEDED:
+        std::cout << "Array Bounds Exceeded" << std::endl;
+        break;
+    case  EXCEPTION_FLT_DENORMAL_OPERAND:
+        std::cout << "Floating Point Denormal Operand" << std::endl;
+        break;
+    case  EXCEPTION_FLT_DIVIDE_BY_ZERO:
+        std::cout << "Floating Point Divide By Zero" << std::endl;
+        break;
+    case  EXCEPTION_FLT_INEXACT_RESULT:
+        std::cout << "Floating Point Inexact Result" << std::endl;
+        break;
+    case  EXCEPTION_FLT_INVALID_OPERATION:
+        std::cout << "Floating Point Invalid Operation" << std::endl;
+        break;
+    case  EXCEPTION_FLT_OVERFLOW:
+        std::cout << "Floating Point Overflow" << std::endl;
+        break;
+    case  EXCEPTION_FLT_STACK_CHECK:
+        std::cout << "Floating Point Stack Check" << std::endl;
+        break;
+    case  EXCEPTION_FLT_UNDERFLOW:
+        std::cout << "Floating Point Underflow" << std::endl;
+        break;
+    case  EXCEPTION_INT_DIVIDE_BY_ZERO:
+        std::cout << "Integer Divide By Zero" << std::endl;
+        break;
+    case  EXCEPTION_INT_OVERFLOW:
+        std::cout << "Integer Overflow" << std::endl;
+        break;
+    case  EXCEPTION_PRIV_INSTRUCTION:
+        std::cout << "Privileged Instruction" << std::endl;
+        break;
+    case  EXCEPTION_IN_PAGE_ERROR:
+        std::cout << "Page Error" << std::endl;
+        break;
+    case  EXCEPTION_ILLEGAL_INSTRUCTION:
+        std::cout << "Illegal Instruction" << std::endl;
+        break;
+    case  EXCEPTION_NONCONTINUABLE_EXCEPTION:
+        std::cout << "Non Continuable Exception" << std::endl;
+        break;
+    case  EXCEPTION_STACK_OVERFLOW:
+        std::cout << "Stack Overflow" << std::endl;
+        break;
+    case  EXCEPTION_INVALID_DISPOSITION:
+        std::cout << "Invalid Disposition" << std::endl;
+        break;
+    case  EXCEPTION_GUARD_PAGE:
+        std::cout << "Guard Page" << std::endl;
+        break;
+    case  EXCEPTION_INVALID_HANDLE:
+        std::cout << "Invalid Handle" << std::endl;
+        break;
+    case  CONTROL_C_EXIT:
+        std::cout << "Control-C Exit" << std::endl;
+        break;
+    default:
+        std::cout << "Unknown Exception" << std::endl;
+        break;
+    }
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+#endif
+
+int main(int argc, char** argv)
+{
+#if defined(_WIN32)
+    __try
+    {
+        bool throwFPE = false;
+        parseOption(argc, argv, throwFPE);
+        if (throwFPE)
+            setThrowFPE();
+/*      
+        double a = 1.0;
+        double b = 0.0;
+        double c = a/b;
+        std::cout << c << std::endl;
+*/
+        effective_main(argc, argv);
+    }
+    __except (filter_exception(GetExceptionCode(), GetExceptionInformation()))
+    {
+        exit(GetExceptionCode());
+    }
+#else
+    effective_main(argc, argv);
+#endif
 }
