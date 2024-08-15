@@ -9,7 +9,7 @@ ICX_TARGET=benchMark_icx
 # Need sourcing /opt/intel/oneapi/setvars.sh for icx to be found
 CHECKICX=$(shell /usr/bin/which icx > /dev/null 2>&1 && echo "FOUND" )
 #$(info checkicx = x$(CHECKICX)x)
-ifneq ("$(CHECKICX)", "FOUND")
+ifneq ($(CHECKICX), FOUND)
   ICX_TARGET=
 endif
 #$(info icxtarget = $(ICX_TARGET))
@@ -24,13 +24,19 @@ else ifneq ($(MACHINE), x86_64)
   $(error unsupported architecture: '$(MACHINE)')
 endif
 
+CLANGVERGCC=
+MACHINE_ID=$(shell /usr/bin/cat /etc/machine-id)
+ifeq ($(MACHINE_ID), 0e77c5947a5b461286b81059bba0e7e5)
+ CLANGVERGCC=--gcc-install-dir=/usr/lib/gcc/aarch64-linux-gnu/13
+endif
+
 all: benchMark $(CLANG_TARGET) $(ICX_TARGET)
 
 benchMark: $(DEPFILES)
 	g++ -O3 -march=$(MARCH) -Wall -Wpedantic $(SOURCEFILES) -lpthread -o benchMark
 
 benchMark_clang: $(DEPFILES)
-	clang++ -O3 -march=$(MARCH) -Weverything -Wno-c++98-compat -Wno-missing-prototypes -Wno-c++98-compat-pedantic $(SOURCEFILES) -lpthread -o benchMark_clang
+	clang++ -O3 $(CLANGVERGCC) -march=$(MARCH) -Weverything -Wno-c++98-compat -Wno-missing-prototypes -Wno-c++98-compat-pedantic $(SOURCEFILES) -lpthread -o benchMark_clang
 
 benchMark_icx: $(DEPFILES)
 	icx -lstdc++ -O3 -march=$(MARCH) -Wall -Wpedantic $(SOURCEFILES) -lpthread -o benchMark_icx
