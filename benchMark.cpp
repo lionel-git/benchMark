@@ -368,7 +368,7 @@ void setThrowFPE()
 
 int filter_exception(unsigned int code, struct _EXCEPTION_POINTERS* ep)
 {
-    std::cout << "Exception code: 0x" << std::hex << code;
+    std::cout << std::format("Exception code: 0x{:x}", code);
     if (ep != nullptr && ep->ExceptionRecord != nullptr)
         std::cout << ", Address=0x" << (void*)ep->ExceptionRecord->ExceptionAddress;
     std::cout << " : ";
@@ -460,12 +460,14 @@ int main(int argc, char** argv)
         parseOption(argc, argv, throwFPE);
         if (throwFPE)
             setThrowFPE();
-/*      
+
+ /*
         double a = 1.0;
         double b = 0.0;
         double c = a/b;
         std::cout << c << std::endl;
-*/
+ */
+
         effective_main(argc, argv);
     }
     __except (filter_exception(GetExceptionCode(), GetExceptionInformation()))
