@@ -33,13 +33,13 @@ endif
 all: benchMark $(CLANG_TARGET) $(ICX_TARGET)
 
 benchMark: $(DEPFILES)
-	g++ -O3 -march=$(MARCH) -Wall -Wpedantic $(SOURCEFILES) -lpthread -o benchMark
+	g++ -std=c++20 -O3 -march=$(MARCH) -Wall -Wpedantic $(SOURCEFILES) -lpthread -o benchMark
 
 benchMark_clang: $(DEPFILES)
-	clang++ -O3 $(CLANGVERGCC) -march=$(MARCH) -Weverything -Wno-c++98-compat -Wno-missing-prototypes -Wno-c++98-compat-pedantic $(SOURCEFILES) -lpthread -o benchMark_clang
+	clang++ -std=c++20 -O3 $(CLANGVERGCC) -march=$(MARCH) -Weverything -Wno-c++98-compat -Wno-missing-prototypes -Wno-c++98-compat-pedantic $(SOURCEFILES) -lpthread -o benchMark_clang
 
 benchMark_icx: $(DEPFILES)
-	icx -lstdc++ -O3 -march=$(MARCH) -Wall -Wpedantic $(SOURCEFILES) -lpthread -o benchMark_icx
+	icx --std=c++20 -lstdc++ -O3 -march=$(MARCH) -Wall -Wpedantic $(SOURCEFILES) -lpthread -o benchMark_icx
 
 clean:
 	rm -f benchMark benchMark_clang benchMark_icx
