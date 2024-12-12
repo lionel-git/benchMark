@@ -26,9 +26,9 @@ endif
 
 CLANGVERGCC=
 MACHINE_ID=$(shell /usr/bin/cat /etc/machine-id)
-ifeq ($(MACHINE_ID), 0e77c5947a5b461286b81059bba0e7e5)
- CLANGVERGCC=--gcc-install-dir=/usr/lib/gcc/aarch64-linux-gnu/13
-endif
+#ifeq ($(MACHINE_ID), 0e77c5947a5b461286b81059bba0e7e5)
+# CLANGVERGCC=--gcc-install-dir=/usr/lib/gcc/aarch64-linux-gnu/13
+#endif
 
 all: benchMark $(CLANG_TARGET) $(ICX_TARGET)
 
