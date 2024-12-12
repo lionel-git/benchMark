@@ -15,7 +15,7 @@
 void FFT(int dir, long m, std::complex<double> x[])
 {
     long i, i1, i2, j, k, l, l1, l2, n;
-    std::complex<double> tx, t1, u, c;
+    std::complex<double> t1, u, c;
 
     /*Calculate the number of points */
     n = 1;
