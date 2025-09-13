@@ -7,7 +7,6 @@
 #include <string>
 #include <complex>
 #include <random>
-//#include <sched.h>
 
 #include "features_check.h"
 
@@ -238,17 +237,24 @@ void set_thread_affinity(std::thread::native_handle_type thread_handle, unsigned
     if (rc == 0)
         std::cerr << "Error calling SetThreadAffinityMask with core_mask=" << core_mask << ": " << GetLastError() << std::endl;
 #else
-    std::cout << "non implemented set_thread_affinity for non Windows platform" << std::endl;
-    /*
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
-    CPU_SET(thread_index, &cpuset);
-    int rc = pthread_setaffinity_np(pthread_self(),
-        sizeof(cpu_set_t), &cpuset);
+    CPU_SET(core_id, &cpuset);
+    int rc = pthread_setaffinity_np(thread_handle, sizeof(cpu_set_t), &cpuset);
     if (rc != 0) {
         std::cerr << "Error calling pthread_setaffinity_np: " << rc << "\n";
     }
+    /*
+    CPU_ZERO(&cpuset);
+    int rc2 = pthread_getaffinity_np(thread_handle, sizeof(cpu_set_t), &cpuset);
+    if (rc2 != 0) {
+        std::cerr << "Error calling pthread_setaffinity_np: " << rc << "\n";
+    }
+    for (size_t i=0;i<CPU_SETSIZE;++i)    
+      if (CPU_ISSET(i, &cpuset))
+	  std::cout << i << std::endl;
     */
+    
 #endif
 }
 
