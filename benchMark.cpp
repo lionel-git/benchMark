@@ -7,10 +7,13 @@
 #include <string>
 #include <complex>
 #include <random>
+//#include <sched.h>
 
 #include "features_check.h"
 
 #include "polynom2.h"
+
+bool G_pin_threads = true;
 
 extern void FFT(int dir, long m, std::complex<double> x[]);
 extern double invert_matrix(size_t size);
@@ -227,6 +230,28 @@ auto get_time(long long b)
 		return std::chrono::high_resolution_clock::now();
 }
 
+void set_thread_affinity(std::thread::native_handle_type thread_handle, unsigned int core_id)
+{
+#if defined(_WIN32)
+	const auto core_mask = 1ULL << core_id;
+	const auto rc = SetThreadAffinityMask(thread_handle, core_mask);
+	if (rc == 0)
+		std::cerr << "Error calling SetThreadAffinityMask with core_mask=" << core_mask << ": " << GetLastError() << std::endl;
+#else
+	std::cout << "non implemented set_thread_affinity for non Windows platform" << std::endl;
+	/*
+	cpu_set_t cpuset;
+	CPU_ZERO(&cpuset);
+	CPU_SET(thread_index, &cpuset);
+	int rc = pthread_setaffinity_np(pthread_self(),
+		sizeof(cpu_set_t), &cpuset);
+	if (rc != 0) {
+		std::cerr << "Error calling pthread_setaffinity_np: " << rc << "\n";
+	}
+	*/
+#endif
+}
+
 void bench(unsigned int threads, const std::string& func_name, double dx, double dy, void (*bench_func)(double ddx, double ddy, long long& ret))
 {
 	std::cout << "Start " << func_name << " " << threads << std::endl;
@@ -235,7 +260,17 @@ void bench(unsigned int threads, const std::string& func_name, double dx, double
 	auto v_threads = std::vector<std::thread>(threads);
 	auto totals = std::vector<long long>(threads);
 	for (unsigned int i = 0; i < threads; i++)
+	{
 		v_threads[i] = std::thread(bench_func, dx, dy, std::ref(totals[i]));
+		if (G_pin_threads)
+		{
+			const auto thread_handle = v_threads[i].native_handle();
+			const unsigned int ht_thread_per_core = 2;
+			const unsigned int max_cores_non_ht = std::thread::hardware_concurrency() / ht_thread_per_core;
+			const unsigned int core_id = i < max_cores_non_ht ? ht_thread_per_core * i : ht_thread_per_core * (i - max_cores_non_ht) + 1; // first real cores, then HT
+			set_thread_affinity(thread_handle, core_id);
+		}
+	}
 	for (unsigned int i = 0; i < threads; i++)
 		v_threads[i].join();
 	long long total = 0;
@@ -347,12 +382,14 @@ int effective_main(int argc, char** argv)
     return 0;
 }
 
-void parseOption(int argc, char** argv, bool& throwFPE)
+void parseOption(int argc, char** argv, bool& throwFPE, bool& pinThreads)
 {
     for (int i = 0; i < argc; i++)
     {
         if (argv[i] == std::string_view("-throwfpe"))
             throwFPE = true;
+		if (argv[i] == std::string_view("-pinthreads"))
+			pinThreads = true;
     }
 }
 
@@ -457,9 +494,12 @@ int main(int argc, char** argv)
     __try
     {
         bool throwFPE = false;
-        parseOption(argc, argv, throwFPE);
+		G_pin_threads = false;
+        parseOption(argc, argv, throwFPE, G_pin_threads);
         if (throwFPE)
             setThrowFPE();
+		if (G_pin_threads)
+			std::cout << "** Pin threads activated" << std::endl;
 
  /*
         double a = 1.0;
