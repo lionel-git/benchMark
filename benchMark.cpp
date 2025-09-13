@@ -490,17 +490,16 @@ int filter_exception(unsigned int code, struct _EXCEPTION_POINTERS* ep)
 
 int main(int argc, char** argv)
 {
+    bool throwFPE = false;
+    G_pin_threads = false;
+    parseOption(argc, argv, throwFPE, G_pin_threads);
+    if (G_pin_threads)
+        std::cout << "** Pin threads activated" << std::endl;
 #if defined(_WIN32)
     __try
     {
-        bool throwFPE = false;
-        G_pin_threads = false;
-        parseOption(argc, argv, throwFPE, G_pin_threads);
         if (throwFPE)
             setThrowFPE();
-        if (G_pin_threads)
-            std::cout << "** Pin threads activated" << std::endl;
-
         /*
                double a = 1.0;
                double b = 0.0;
