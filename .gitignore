@@ -344,3 +344,4 @@ callgrind.out.*
 /Exes
 _defines*.txt
 .gdb_history
+/clang_Exes

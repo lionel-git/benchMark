@@ -136,7 +136,7 @@
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='clang_avx512|x64'">
-    <OutDir>$(SolutionDir)\Exes\</OutDir>
+    <OutDir>$(SolutionDir)\clang_Exes\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\$(PlatformToolset)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
@@ -146,7 +146,7 @@
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='clang_avx2|x64'">
-    <OutDir>$(SolutionDir)\Exes\</OutDir>
+    <OutDir>$(SolutionDir)\clang_Exes\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\$(PlatformToolset)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
@@ -154,6 +154,14 @@
     <OutDir>$(SolutionDir)\Exes\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\$(PlatformToolset)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='clang_debug|x64'">
+    <OutDir>$(SolutionDir)\clang_Exes\</OutDir>
+    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <OutDir>$(SolutionDir)\Exes\</OutDir>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnabled>false</VcpkgEnabled>
